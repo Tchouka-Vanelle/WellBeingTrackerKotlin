@@ -66,7 +66,9 @@ class LoginActivity : AppCompatActivity() {
             if (username.isBlank() || password.isBlank()) {
                 errorMessageTextView.text = getString(R.string.all_fields_are_required)
                 errorMessageTextView.visibility = View.VISIBLE
-                Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show()
+                val toast = Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT)
+                toast.setGravity(Gravity.CENTER, 0, -1200) // Position it in the center and move it upwards
+                toast.show()
             } else {
                 mainViewModel.loginUser(username, password) { isSuccessful ->
                     if (isSuccessful) {

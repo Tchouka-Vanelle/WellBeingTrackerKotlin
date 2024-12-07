@@ -69,12 +69,16 @@ class RegisterActivity : AppCompatActivity() {
             if(username.isBlank() || password.isBlank() || confirmPassword.isBlank()) {
                 errorMessageTextView.visibility = View.VISIBLE
                 errorMessageTextView.text = getString(R.string.all_fields_are_required)
-                Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show()
+                val toast = Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT)
+                toast.setGravity(Gravity.CENTER, 0, -1200) // Position it in the center and move it upwards
+                toast.show()
             }
             else if (password != confirmPassword) {
                 errorMessageTextView.text= getString(R.string.passwords_do_not_match)
                 errorMessageTextView.visibility = View.VISIBLE
-                Toast.makeText(this, "Passwords do not match!", Toast.LENGTH_SHORT).show()
+                val toast = Toast.makeText(this, "Passwords do not match!", Toast.LENGTH_SHORT)
+                toast.setGravity(Gravity.CENTER, 0, -1200) // Position it in the center and move it upwards
+                toast.show()
             }
             else {
                 // Register the user
