@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">WellbeingTracker</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="create_an_account">Create an Account</string>
+    <string name="welcome_to_the_well_being_app">Welcome to the Well-being App!</string>
+    <string name="username_already_exists">Username already exists!</string>
+    <string name="passwords_do_not_match">Passwords do not match!</string>
+    <string name="all_fields_are_required">All fields are required!</string>
+    <string name="already_have_account">Already Have Account</string>
+    <string name="no_account">No Account</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="invalid_credentials">Invalid Credentials</string>
+</resources>
