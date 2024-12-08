@@ -11,5 +11,5 @@ interface QuestionQuestionnaireDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertQuestions(vararg  questions: QuestionQuestionnaire): List<Long>
     @Query("SELECT * FROM question_questionnaires WHERE idQuestionnaire = :questionnaireId")
-    suspend fun getQuestionsForQuestionnaire(questionnaireId: Int): List<QuestionQuestionnaire>
+    suspend fun getAllQuestionsForQuestionnaire(questionnaireId: Int): List<QuestionQuestionnaire>
 }

@@ -18,6 +18,7 @@ import edu.ufp.wellbeingtracker.database.AppDatabase
 import edu.ufp.wellbeingtracker.database.MainRepository
 import edu.ufp.wellbeingtracker.database.MainViewModel
 import edu.ufp.wellbeingtracker.database.MainViewModelFactory
+import edu.ufp.wellbeingtracker.database.WellBeingApp
 
 class LoginActivity : AppCompatActivity() {
 
@@ -35,19 +36,12 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
-        // Initialize ViewModel with Factory
-        val database = AppDatabase.getInstance(this)
-        val repository = MainRepository(
-            database.userDAO(),
-            database.questionnaireDAO(),
-            database.questionQuestionnaireDAO(),
-            database.typeAnswerDAO(),
-            database.answerQuestionnaireDAO()
-        )
-        mainViewModel = ViewModelProvider(
+
+        val mainViewModel = ViewModelProvider(
             this,
-            MainViewModelFactory(repository)
+            MainViewModelFactory((this.applicationContext as WellBeingApp).appRepository)
         )[MainViewModel::class.java]
+
 
         // Set up UI elements
         val usernameEditText = findViewById<EditText>(R.id.editTextUsername)
@@ -67,22 +61,25 @@ class LoginActivity : AppCompatActivity() {
                 errorMessageTextView.text = getString(R.string.all_fields_are_required)
                 errorMessageTextView.visibility = View.VISIBLE
                 val toast = Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT)
-                toast.setGravity(Gravity.CENTER, 0, -1200) // Position it in the center and move it upwards
+                toast.setGravity(Gravity.CENTER, 0, 0) // Position it in the center and move it upwards
                 toast.show()
             } else {
-                mainViewModel.loginUser(username, password) { isSuccessful ->
-                    if (isSuccessful) {
+                mainViewModel.loginUser(username, password) { userId ->
+                    if (userId > 0) {
                         val toast = Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT)
-                        toast.setGravity(Gravity.CENTER, 0, -1200) // Position it in the center and move it upwards
+                        toast.setGravity(Gravity.CENTER, 0, 0) // Position it in the center and move it upwards
                         toast.show()
+
+                        //change page
                         val intent = Intent(this, HomeActivity::class.java)
+                        intent.putExtra("userId", userId)
                         startActivity(intent)
                         finish() // Close LoginActivity
                     } else {
                         errorMessageTextView.text = getString(R.string.invalid_credentials)
                         errorMessageTextView.visibility = View.VISIBLE
-                        val toast = Toast.makeText(this, "Invalid username or password.", Toast.LENGTH_SHORT)
-                        toast.setGravity(Gravity.CENTER, 0, -1200) // Position it in the center and move it upwards
+                        val toast = Toast.makeText(this, "Invalid username or password! Please check your credentials.", Toast.LENGTH_SHORT)
+                        toast.setGravity(Gravity.CENTER, 0, 0) // Position it in the center and move it upwards
                         toast.show()
                     }
                 }

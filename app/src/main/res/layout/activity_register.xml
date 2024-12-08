@@ -94,7 +94,7 @@
         android:id="@+id/textViewAlreadyHaveAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/already_have_account"
+        android:text="@string/already_have_account_sign_in"
         android:textColor="@color/purple_700"
         android:textSize="14sp"
         android:fontFamily="sans-serif"

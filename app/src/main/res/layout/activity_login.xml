@@ -78,7 +78,7 @@
         android:id="@+id/textViewSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/sign_up"
+        android:text="@string/you_don_t_have_an_account_sign_up"
         android:textColor="@color/purple_700"
         android:textSize="14sp"
         android:fontFamily="sans-serif"

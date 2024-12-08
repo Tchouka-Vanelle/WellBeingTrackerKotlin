@@ -3,6 +3,7 @@ package edu.ufp.wellbeingtracker.database.entities
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.time.LocalDateTime
 
 @Entity(
     tableName = "answer_questionnaires",
@@ -32,6 +33,5 @@ data class AnswerQuestionnaire(
     val idQuestionQuestionnaire: Int,
     val idUser: Int,
     val idTypeAnswer: Int,
-    val dateAnswer: String,
-    val dateTimeAnswer: String
+    val dateTimeAnswer: LocalDateTime
 )

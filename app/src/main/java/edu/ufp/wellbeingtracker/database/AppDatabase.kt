@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import edu.ufp.wellbeingtracker.database.entities.AnswerQuestionnaire
 import edu.ufp.wellbeingtracker.database.entities.QuestionQuestionnaire
 import edu.ufp.wellbeingtracker.database.entities.Questionnaire
@@ -14,6 +15,8 @@ import edu.ufp.wellbeingtracker.database.entities_dao.QuestionQuestionnaireDAO
 import edu.ufp.wellbeingtracker.database.entities_dao.QuestionnaireDAO
 import edu.ufp.wellbeingtracker.database.entities_dao.TypeAnswerDAO
 import edu.ufp.wellbeingtracker.database.entities_dao.UserDAO
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Database(
     entities = [
@@ -36,14 +39,27 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
         @Volatile private var INSTANCE: AppDatabase? = null
 
-        fun getInstance(context: Context): AppDatabase {
+        fun getInstance(context: Context, scope: CoroutineScope): AppDatabase {
+            //Singleton impl: if instance not null then return it, else create new instance
             return INSTANCE ?: synchronized(this) {
                 Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
                     "wellbeing.db"
-                ).build().also { INSTANCE = it }
+                )
+                    /*.addCallback(object: RoomDatabase.Callback() {
+                        override fun onCreate(db: SupportSQLiteDatabase) {
+                            super.onCreate(db)
+                            scope.launch {
+                                val instance = getInstance(context, scope)
+                                instance.pre
+                            }
+                        }
+                    })*/
+                    .build().also { INSTANCE = it }
+
             }
+
         }
     }
 }
