@@ -5,25 +5,24 @@ import com.jakewharton.threetenabp.AndroidThreeTen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 /*
 * Extending Application:
-
-WellBeingApp inherits from the Application class, which is a global singleton in Android.
-*It's created before any activity or service and is used to initialize app-wide resources.*/
+*
+* WellBeingApp inherits from the Application class, which is a global singleton in Android.
+* It's created before any activity or service and is used to initialize app-wide resources.
+*/
 class WellBeingApp : Application() {
-    override fun onCreate(){
-        super.onCreate()
-        AndroidThreeTen.init(this)
+
+    // CoroutineScope for database operations
+    private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+    // Lazy initialization for the database and repository
+    val database: AppDatabase by lazy {
+        AppDatabase.getInstance(this, applicationScope)
     }
-    // No need to cancel this scope since it will be killed with the process
-    val applicationScope = CoroutineScope(SupervisorJob()  + Dispatchers.IO)
-
-    val database by lazy { AppDatabase.getInstance(this, applicationScope) }
-
-    /*by lazy ensures the repository is created only when it is first accessed,
-    saving memory and startup time.*/
-    val appRepository by lazy {
+    val appRepository: MainRepository by lazy {
         MainRepository(
             database.userDAO(),
             database.questionnaireDAO(),
@@ -31,5 +30,13 @@ class WellBeingApp : Application() {
             database.typeAnswerDAO(),
             database.answerQuestionnaireDAO()
         )
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+
+        // Initialize ThreeTenABP for date/time support
+        AndroidThreeTen.init(this)
+
     }
 }

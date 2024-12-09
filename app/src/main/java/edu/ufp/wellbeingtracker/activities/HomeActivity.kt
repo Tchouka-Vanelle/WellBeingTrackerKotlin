@@ -9,11 +9,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import edu.ufp.wellbeingtracker.R
 import edu.ufp.wellbeingtracker.database.AppDatabase
+import edu.ufp.wellbeingtracker.database.MainViewModelFactory
+import edu.ufp.wellbeingtracker.database.WellBeingApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
-class HomeActivity  : AppCompatActivity(){
+class HomeActivity : AppCompatActivity(){
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: QuestionnairesAdapter
@@ -35,7 +37,8 @@ class HomeActivity  : AppCompatActivity(){
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         //fetch data from database
-        val database = AppDatabase.getInstance(this)
+
+        val database = (this.applicationContext as WellBeingApp).database
         val questionnaireWithQuestions = runBlocking {
             withContext(Dispatchers.IO) {
 

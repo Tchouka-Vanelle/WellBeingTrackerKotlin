@@ -2,7 +2,9 @@ package edu.ufp.wellbeingtracker.database.entities
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
+import java.sql.Date
 import java.time.LocalDateTime
 
 @Entity(
@@ -26,6 +28,11 @@ import java.time.LocalDateTime
             childColumns = ["idTypeAnswer"],
             onDelete = ForeignKey.CASCADE
         )
+    ],
+    indices = [
+        Index(value = ["idQuestionQuestionnaire"]),
+        Index(value = ["idUser"]),
+        Index(value = ["idTypeAnswer"])
     ]
 )
 data class AnswerQuestionnaire(
@@ -33,5 +40,5 @@ data class AnswerQuestionnaire(
     val idQuestionQuestionnaire: Int,
     val idUser: Int,
     val idTypeAnswer: Int,
-    val dateTimeAnswer: LocalDateTime
+    val dateTimeAnswer: Date
 )

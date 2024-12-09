@@ -2,6 +2,7 @@ package edu.ufp.wellbeingtracker.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
@@ -19,6 +20,7 @@ import edu.ufp.wellbeingtracker.database.MainRepository
 import edu.ufp.wellbeingtracker.database.MainViewModel
 import edu.ufp.wellbeingtracker.database.MainViewModelFactory
 import edu.ufp.wellbeingtracker.database.WellBeingApp
+import edu.ufp.wellbeingtracker.utils.showToast
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -36,11 +38,12 @@ class RegisterActivity : AppCompatActivity() {
         }
 
 
-        val mainViewModel = ViewModelProvider(
+        mainViewModel = ViewModelProvider(
             this,
             MainViewModelFactory((this.applicationContext as WellBeingApp).appRepository)
         )[MainViewModel::class.java]
 
+        Log.d("LoginActivity", "mainViewModel initialized: $mainViewModel")
 
         //Set up UI elements
         val usernameEditText = findViewById<EditText>(R.id.editTextUsername)
@@ -62,33 +65,27 @@ class RegisterActivity : AppCompatActivity() {
             if(username.isBlank() || password.isBlank() || confirmPassword.isBlank()) {
                 errorMessageTextView.visibility = View.VISIBLE
                 errorMessageTextView.text = getString(R.string.all_fields_are_required)
-                val toast = Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT)
-                toast.setGravity(Gravity.CENTER, 0, 0) // Position it in the center and move it upwards
-                toast.show()
+                showToast(this, "All fields are required")
             }
             else if (password != confirmPassword) {
                 errorMessageTextView.text= getString(R.string.passwords_do_not_match)
                 errorMessageTextView.visibility = View.VISIBLE
-                val toast = Toast.makeText(this, "Passwords do not match!", Toast.LENGTH_SHORT)
-                toast.setGravity(Gravity.CENTER, 0, 0) // Position it in the center and move it upwards
-                toast.show()
+                showToast(this, "Passwords do not match!")
             }
             else {
                 // Register the user
                 mainViewModel.registerUser(username, password) { isSuccessful ->
                     if(isSuccessful) {
-                        val toast = Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT)
-                        toast.setGravity(Gravity.CENTER, 0, 0) // Position it in the center and move it upwards
-                        toast.show()
+                        showToast(this, "Registration successful!")
+
                         val intent = Intent(this, LoginActivity::class.java)
                         startActivity(intent)
-                        //finish()// close registerActivity
+                        finish()// close registerActivity
                     } else {
                         errorMessageTextView.text= getString(R.string.username_already_exists)
                         errorMessageTextView.visibility = View.VISIBLE
-                        val toast = Toast.makeText(this, "Username already exists.", Toast.LENGTH_SHORT)
-                        toast.setGravity(Gravity.CENTER, 0, 0) // Position it in the center and move it upwards
-                        toast.show()
+                        showToast(this, "Username already exists.")
+
                     }
 
                 }

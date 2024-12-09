@@ -19,6 +19,7 @@ import edu.ufp.wellbeingtracker.database.MainRepository
 import edu.ufp.wellbeingtracker.database.MainViewModel
 import edu.ufp.wellbeingtracker.database.MainViewModelFactory
 import edu.ufp.wellbeingtracker.database.WellBeingApp
+import edu.ufp.wellbeingtracker.utils.showToast
 
 class LoginActivity : AppCompatActivity() {
 
@@ -37,7 +38,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
 
-        val mainViewModel = ViewModelProvider(
+        mainViewModel = ViewModelProvider(
             this,
             MainViewModelFactory((this.applicationContext as WellBeingApp).appRepository)
         )[MainViewModel::class.java]
@@ -60,15 +61,11 @@ class LoginActivity : AppCompatActivity() {
             if (username.isBlank() || password.isBlank()) {
                 errorMessageTextView.text = getString(R.string.all_fields_are_required)
                 errorMessageTextView.visibility = View.VISIBLE
-                val toast = Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT)
-                toast.setGravity(Gravity.CENTER, 0, 0) // Position it in the center and move it upwards
-                toast.show()
+                showToast(this, "All fields are required")
             } else {
                 mainViewModel.loginUser(username, password) { userId ->
                     if (userId > 0) {
-                        val toast = Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT)
-                        toast.setGravity(Gravity.CENTER, 0, 0) // Position it in the center and move it upwards
-                        toast.show()
+                        showToast(this, "Login successful!")
 
                         //change page
                         val intent = Intent(this, HomeActivity::class.java)
@@ -78,9 +75,7 @@ class LoginActivity : AppCompatActivity() {
                     } else {
                         errorMessageTextView.text = getString(R.string.invalid_credentials)
                         errorMessageTextView.visibility = View.VISIBLE
-                        val toast = Toast.makeText(this, "Invalid username or password! Please check your credentials.", Toast.LENGTH_SHORT)
-                        toast.setGravity(Gravity.CENTER, 0, 0) // Position it in the center and move it upwards
-                        toast.show()
+                        showToast(this, "Invalid username or password! Please check your credentials.")
                     }
                 }
             }

@@ -2,6 +2,7 @@ package edu.ufp.wellbeingtracker.database.entities
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
@@ -11,7 +12,8 @@ import androidx.room.PrimaryKey
         parentColumns = ["id"],
         childColumns = ["idQuestionnaire"],
         onDelete = ForeignKey.CASCADE
-    )]
+    )],
+    indices = [Index(value = ["idQuestionnaire"])]
 )
 data class QuestionQuestionnaire(
     @PrimaryKey(autoGenerate = true) val id: Int = 1,
