@@ -1,14 +1,18 @@
 package edu.ufp.wellbeingtracker.activities
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import edu.ufp.wellbeingtracker.R
 import edu.ufp.wellbeingtracker.database.AppDatabase
+import edu.ufp.wellbeingtracker.database.MainViewModel
 import edu.ufp.wellbeingtracker.database.MainViewModelFactory
 import edu.ufp.wellbeingtracker.database.WellBeingApp
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +23,7 @@ class HomeActivity : AppCompatActivity(){
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: QuestionnairesAdapter
+    private lateinit var mainViewModel: MainViewModel
     private var userId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,26 +43,23 @@ class HomeActivity : AppCompatActivity(){
 
         //fetch data from database
 
-        val database = (this.applicationContext as WellBeingApp).database
-        val questionnaireWithQuestions = runBlocking {
-            withContext(Dispatchers.IO) {
+        mainViewModel = ViewModelProvider(
+            this,
+            MainViewModelFactory((applicationContext as WellBeingApp).appRepository)
+        )[MainViewModel::class.java]
 
-                val questionnaires = database.questionnaireDAO().getAllQuestionnaires()
-                val questionnairesWithQuestions = mutableListOf<QuestionnaireWithQuestions>()
-
-                for (questionnaire in questionnaires) {
-                    val questions = database.questionQuestionnaireDAO().getAllQuestionsForQuestionnaire(questionnaire.id)
-                    questionnairesWithQuestions.add(QuestionnaireWithQuestions(questionnaire, questions))
-                }
-                questionnairesWithQuestions
+        mainViewModel.questionnaireWithQuestions.observe(this, Observer {
+            questionnaireWithQuestions ->
+            if(questionnaireWithQuestions != null) {
+                Log.d("HomeActivity", "questionnaireWithQuestions = $questionnaireWithQuestions")
+                //set up adapter
+                adapter = QuestionnairesAdapter(questionnaireWithQuestions)
+                recyclerView.adapter = adapter
             }
-        }
+        })
+        Log.d("HomeActivity 2", "questionnaireWithQuestions 2 = $mainViewModel.questionnaireWithQuestions")
 
-        //set up adapter
-        adapter = QuestionnairesAdapter(questionnaireWithQuestions)
-        recyclerView.adapter = adapter
-
-
+        mainViewModel.fetchQuestionnaires()
 
     }
 }

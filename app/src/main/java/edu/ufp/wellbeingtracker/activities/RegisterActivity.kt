@@ -20,7 +20,7 @@ import edu.ufp.wellbeingtracker.database.MainRepository
 import edu.ufp.wellbeingtracker.database.MainViewModel
 import edu.ufp.wellbeingtracker.database.MainViewModelFactory
 import edu.ufp.wellbeingtracker.database.WellBeingApp
-import edu.ufp.wellbeingtracker.utils.showToast
+import edu.ufp.wellbeingtracker.utils.showSnackbar
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -65,18 +65,18 @@ class RegisterActivity : AppCompatActivity() {
             if(username.isBlank() || password.isBlank() || confirmPassword.isBlank()) {
                 errorMessageTextView.visibility = View.VISIBLE
                 errorMessageTextView.text = getString(R.string.all_fields_are_required)
-                showToast(this, "All fields are required")
+                showSnackbar(findViewById(R.id.main), "All fields are required")
             }
             else if (password != confirmPassword) {
                 errorMessageTextView.text= getString(R.string.passwords_do_not_match)
                 errorMessageTextView.visibility = View.VISIBLE
-                showToast(this, "Passwords do not match!")
+                showSnackbar(findViewById(R.id.main), "Passwords do not match!")
             }
             else {
                 // Register the user
                 mainViewModel.registerUser(username, password) { isSuccessful ->
                     if(isSuccessful) {
-                        showToast(this, "Registration successful!")
+                        showSnackbar(findViewById(R.id.main), "Registration successful!")
 
                         val intent = Intent(this, LoginActivity::class.java)
                         startActivity(intent)
@@ -84,7 +84,7 @@ class RegisterActivity : AppCompatActivity() {
                     } else {
                         errorMessageTextView.text= getString(R.string.username_already_exists)
                         errorMessageTextView.visibility = View.VISIBLE
-                        showToast(this, "Username already exists.")
+                        showSnackbar(findViewById(R.id.main), "Username already exists.")
 
                     }
 

@@ -19,7 +19,7 @@ import edu.ufp.wellbeingtracker.database.MainRepository
 import edu.ufp.wellbeingtracker.database.MainViewModel
 import edu.ufp.wellbeingtracker.database.MainViewModelFactory
 import edu.ufp.wellbeingtracker.database.WellBeingApp
-import edu.ufp.wellbeingtracker.utils.showToast
+import edu.ufp.wellbeingtracker.utils.showSnackbar
 
 class LoginActivity : AppCompatActivity() {
 
@@ -61,11 +61,11 @@ class LoginActivity : AppCompatActivity() {
             if (username.isBlank() || password.isBlank()) {
                 errorMessageTextView.text = getString(R.string.all_fields_are_required)
                 errorMessageTextView.visibility = View.VISIBLE
-                showToast(this, "All fields are required")
+                showSnackbar(findViewById(R.id.main), "All fields are required")
             } else {
                 mainViewModel.loginUser(username, password) { userId ->
                     if (userId > 0) {
-                        showToast(this, "Login successful!")
+                        showSnackbar(findViewById(R.id.main), "Login successful!")
 
                         //change page
                         val intent = Intent(this, HomeActivity::class.java)
@@ -75,7 +75,7 @@ class LoginActivity : AppCompatActivity() {
                     } else {
                         errorMessageTextView.text = getString(R.string.invalid_credentials)
                         errorMessageTextView.visibility = View.VISIBLE
-                        showToast(this, "Invalid username or password! Please check your credentials.")
+                        showSnackbar(findViewById(R.id.main), "Invalid username or password! Please check your credentials.")
                     }
                 }
             }

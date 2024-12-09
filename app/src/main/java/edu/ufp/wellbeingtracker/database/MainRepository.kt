@@ -31,5 +31,12 @@ class MainRepository(
     suspend fun insertTypeAnswers(vararg typeAnswers: TypeAnswer) =
         typeAnswerDAO.insertTypeAnswers(*typeAnswers)
 
-    suspend fun insertAnswer(answer: AnswerQuestionnaire) = answerQuestionnaireDAO.insertAnswer(answer)
+    suspend fun insertAnswer(answer: AnswerQuestionnaire) =
+        answerQuestionnaireDAO.insertAnswer(answer)
+
+    suspend fun getAllQuestionnaires() =
+        questionnaireDao.getAllQuestionnaires()
+
+    suspend fun getAllQuestionsForQuestionnaire(id: Int) =
+        questionQuestionnaireDAO.getAllQuestionsForQuestionnaire(id)
 }

@@ -1,8 +1,10 @@
 package edu.ufp.wellbeingtracker.database
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import edu.ufp.wellbeingtracker.activities.QuestionnaireWithQuestions
 import edu.ufp.wellbeingtracker.database.entities.AnswerQuestionnaire
 import edu.ufp.wellbeingtracker.database.entities.QuestionQuestionnaire
 import edu.ufp.wellbeingtracker.database.entities.Questionnaire
@@ -18,6 +20,20 @@ import kotlinx.coroutines.runBlocking
 import java.sql.Date
 
 class MainViewModel(private val repository: MainRepository) : ViewModel() {
+
+    val questionnaireWithQuestions = MutableLiveData<List<QuestionnaireWithQuestions>>()
+
+    fun fetchQuestionnaires() {
+        viewModelScope.launch {
+            val questionnaires = repository.getAllQuestionnaires()
+            val questionnairesWithQuestions = mutableListOf<QuestionnaireWithQuestions>()
+            for (questionnaire in questionnaires) {
+                val questions = repository.getAllQuestionsForQuestionnaire(questionnaire.id)
+                questionnairesWithQuestions.add(QuestionnaireWithQuestions(questionnaire, questions))
+            }
+            questionnaireWithQuestions.postValue(questionnairesWithQuestions)  // Set the LiveData value
+        }
+    }
 
     fun registerUser(username: String, password: String, onResult: (Boolean) -> Unit) {
         viewModelScope.launch {
