@@ -22,7 +22,7 @@ object DatabaseSeeder {
                     Questionnaire(2, "WELLBEING1", true, false),
                     Questionnaire(3, "WELLBEING2", true, true)
                 )
-
+                println("Inserted questionnaires")
                 questionQuestionnaireDAO.insertQuestions(
                     QuestionQuestionnaire(1, 1, "I slept very well and feel that my sleep was totally restorative."),
                     QuestionQuestionnaire(2, 1, "I feel totally rested after this night's sleep."),
@@ -35,12 +35,13 @@ object DatabaseSeeder {
                     QuestionQuestionnaire(9, 3, "I felt good, at peace with myself"),
                     QuestionQuestionnaire(10, 3, "I felt confident.")
                 )
-
+                println("Inserted questions")
                 typeAnswerDAO.insertTypeAnswers(
                     TypeAnswer(1, 1, "DISAGREE"),
                     TypeAnswer(2, 2, "EITHER DISAGREE NOR AGREE"),
                     TypeAnswer(3, 3, "AGREE")
                 )
+                println("Inserted type answers")
             }
         } catch (e: Exception) {
             e.printStackTrace()

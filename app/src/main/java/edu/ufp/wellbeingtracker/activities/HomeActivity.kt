@@ -50,14 +50,15 @@ class HomeActivity : AppCompatActivity(){
 
         mainViewModel.questionnaireWithQuestions.observe(this, Observer {
             questionnaireWithQuestions ->
-            if(questionnaireWithQuestions != null) {
+            if(questionnaireWithQuestions != null && questionnaireWithQuestions.isNotEmpty()) {
                 Log.d("HomeActivity", "questionnaireWithQuestions = $questionnaireWithQuestions")
                 //set up adapter
                 adapter = QuestionnairesAdapter(questionnaireWithQuestions)
                 recyclerView.adapter = adapter
+            }else {
+                Log.d("HomeActivity", "No questionnaires found.")
             }
         })
-        Log.d("HomeActivity 2", "questionnaireWithQuestions 2 = $mainViewModel.questionnaireWithQuestions")
 
         mainViewModel.fetchQuestionnaires()
 

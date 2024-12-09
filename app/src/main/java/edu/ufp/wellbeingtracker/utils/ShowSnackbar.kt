@@ -4,7 +4,6 @@ import android.view.Gravity
 import com.google.android.material.snackbar.Snackbar
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.LinearLayout
 
 fun showSnackbar(view: View, message: String) {
     val snackbar = Snackbar.make(view, message, Snackbar.LENGTH_SHORT)
