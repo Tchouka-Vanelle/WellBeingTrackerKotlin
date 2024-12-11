@@ -39,4 +39,10 @@ class MainRepository(
 
     suspend fun getAllQuestionsForQuestionnaire(id: Int) =
         questionQuestionnaireDAO.getAllQuestionsForQuestionnaire(id)
+
+    suspend fun countAllQuestionsForQuestionnaire(id: Int) =
+        questionQuestionnaireDAO.countAllQuestionsForQuestionnaire(id)
+
+    suspend fun getAllMeanings() =
+        typeAnswerDAO.getAllMeanings()
 }

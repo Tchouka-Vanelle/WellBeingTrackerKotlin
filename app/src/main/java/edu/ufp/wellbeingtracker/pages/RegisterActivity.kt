@@ -1,36 +1,32 @@
-package edu.ufp.wellbeingtracker.activities
+package edu.ufp.wellbeingtracker.pages
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Gravity
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import edu.ufp.wellbeingtracker.R
-import edu.ufp.wellbeingtracker.database.AppDatabase
-import edu.ufp.wellbeingtracker.database.MainRepository
 import edu.ufp.wellbeingtracker.database.MainViewModel
 import edu.ufp.wellbeingtracker.database.MainViewModelFactory
 import edu.ufp.wellbeingtracker.database.WellBeingApp
-import edu.ufp.wellbeingtracker.utils.showSnackbar
+import edu.ufp.wellbeingtracker.utils.functions.showSnackbar
 
-class LoginActivity : AppCompatActivity() {
+class RegisterActivity : AppCompatActivity() {
 
     private lateinit var mainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_register)
 
-        // Apply edge-to-edge UI
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -43,49 +39,59 @@ class LoginActivity : AppCompatActivity() {
             MainViewModelFactory((this.applicationContext as WellBeingApp).appRepository)
         )[MainViewModel::class.java]
 
+        Log.d("LoginActivity", "mainViewModel initialized: $mainViewModel")
 
-        // Set up UI elements
+        //Set up UI elements
         val usernameEditText = findViewById<EditText>(R.id.editTextUsername)
         val passwordEditText = findViewById<EditText>(R.id.editTextPassword)
-        val loginButton = findViewById<Button>(R.id.buttonLogin)
+        val confirmPasswordEdit = findViewById<EditText>(R.id.editTextConfirmPassword)
+        val registerButton = findViewById<Button>(R.id.buttonRegister)
         val errorMessageTextView = findViewById<TextView>(R.id.textViewErrorMessage)
-        val signUpTextView = findViewById<TextView>(R.id.textViewSignUp)
+        val alreadyHaveAccountTextView = findViewById<TextView>(R.id.textViewAlreadyHaveAccount)
 
         errorMessageTextView.visibility = View.INVISIBLE
 
-        // Handle login button click
-        loginButton.setOnClickListener {
+        //Handle register button click
+        registerButton.setOnClickListener {
             val username = usernameEditText.text.toString()
             val password = passwordEditText.text.toString()
+            val confirmPassword = confirmPasswordEdit.text.toString()
 
-            if (username.isBlank() || password.isBlank()) {
-                errorMessageTextView.text = getString(R.string.all_fields_are_required)
+            //validate input
+            if(username.isBlank() || password.isBlank() || confirmPassword.isBlank()) {
                 errorMessageTextView.visibility = View.VISIBLE
+                errorMessageTextView.text = getString(R.string.all_fields_are_required)
                 showSnackbar(findViewById(R.id.main), "All fields are required")
-            } else {
-                mainViewModel.loginUser(username, password) { userId ->
-                    if (userId > 0) {
-                        showSnackbar(findViewById(R.id.main), "Login successful!")
+            }
+            else if (password != confirmPassword) {
+                errorMessageTextView.text= getString(R.string.passwords_do_not_match)
+                errorMessageTextView.visibility = View.VISIBLE
+                showSnackbar(findViewById(R.id.main), "Passwords do not match!")
+            }
+            else {
+                // Register the user
+                mainViewModel.registerUser(username, password) { isSuccessful ->
+                    if(isSuccessful) {
+                        showSnackbar(findViewById(R.id.main), "Registration successful!")
 
-                        //change page
-                        val intent = Intent(this, HomeActivity::class.java)
-                        intent.putExtra("userId", userId)
+                        val intent = Intent(this, LoginActivity::class.java)
                         startActivity(intent)
-                        finish() // Close LoginActivity
+                        finish()// close registerActivity
                     } else {
-                        errorMessageTextView.text = getString(R.string.invalid_credentials)
+                        errorMessageTextView.text= getString(R.string.username_already_exists)
                         errorMessageTextView.visibility = View.VISIBLE
-                        showSnackbar(findViewById(R.id.main), "Invalid username or password! Please check your credentials.")
+                        showSnackbar(findViewById(R.id.main), "Username already exists.")
+
                     }
+
                 }
             }
         }
-
-        // Handle "Sign up" link click
-        signUpTextView.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
+        alreadyHaveAccountTextView.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
         }
+
     }
 }

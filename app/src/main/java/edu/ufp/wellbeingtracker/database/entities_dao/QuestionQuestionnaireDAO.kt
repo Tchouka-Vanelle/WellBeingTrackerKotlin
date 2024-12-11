@@ -12,4 +12,6 @@ interface QuestionQuestionnaireDAO {
     suspend fun insertQuestions(vararg  questions: QuestionQuestionnaire): List<Long>
     @Query("SELECT * FROM question_questionnaires WHERE idQuestionnaire = :questionnaireId")
     suspend fun getAllQuestionsForQuestionnaire(questionnaireId: Int): List<QuestionQuestionnaire>
+    @Query("SELECT count(*) FROM question_questionnaires WHERE idQuestionnaire = :questionnaireId")
+    suspend fun countAllQuestionsForQuestionnaire(questionnaireId: Int): Int
 }

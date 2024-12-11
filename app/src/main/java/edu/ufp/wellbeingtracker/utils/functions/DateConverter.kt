@@ -1,4 +1,4 @@
-package edu.ufp.wellbeingtracker.utils
+package edu.ufp.wellbeingtracker.utils.functions
 
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters

@@ -1,4 +1,4 @@
-package edu.ufp.wellbeingtracker.activities
+package edu.ufp.wellbeingtracker.utils.models
 
 import edu.ufp.wellbeingtracker.database.entities.QuestionQuestionnaire
 import edu.ufp.wellbeingtracker.database.entities.Questionnaire

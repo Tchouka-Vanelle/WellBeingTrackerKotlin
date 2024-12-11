@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="8dp"
@@ -11,45 +12,83 @@
         android:id="@+id/textViewQuestion"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:layout_marginEnd="8dp"
         android:textColor="@color/black"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/layoutIcons"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginEnd="8dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.167" />
 
     <LinearLayout
         android:id="@+id/layoutIcons"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/textViewQuestion"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
             android:id="@+id/iconDisagree"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_disagree"
+            android:layout_marginEnd="8dp"
             android:contentDescription="@string/disagree"
-            android:layout_marginEnd="8dp" />
+            android:src="@drawable/ic_disagree" />
 
         <ImageView
             android:id="@+id/iconNeutral"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_neutral"
+            android:layout_marginEnd="8dp"
             android:contentDescription="@string/neither_disagree_nor_agree"
-            android:layout_marginEnd="8dp" />
+            android:src="@drawable/ic_neutral" />
 
         <ImageView
             android:id="@+id/iconAgree"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_agree"
-            android:contentDescription="@string/agree" />
+            android:contentDescription="@string/agree"
+            android:src="@drawable/ic_agree" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutIcons">
+
+        <TextView
+            android:id="@+id/descriptionDisagree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/descriptionNeutral"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/descriptionAgree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

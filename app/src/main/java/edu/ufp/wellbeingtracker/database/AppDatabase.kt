@@ -1,6 +1,7 @@
 package edu.ufp.wellbeingtracker.database
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -16,7 +17,7 @@ import edu.ufp.wellbeingtracker.database.entities_dao.QuestionQuestionnaireDAO
 import edu.ufp.wellbeingtracker.database.entities_dao.QuestionnaireDAO
 import edu.ufp.wellbeingtracker.database.entities_dao.TypeAnswerDAO
 import edu.ufp.wellbeingtracker.database.entities_dao.UserDAO
-import edu.ufp.wellbeingtracker.utils.DateConverter
+import edu.ufp.wellbeingtracker.utils.functions.DateConverter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,7 +30,7 @@ import kotlinx.coroutines.launch
         TypeAnswer::class,
         AnswerQuestionnaire::class,
                ],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(DateConverter::class)
@@ -71,10 +72,13 @@ abstract class AppDatabase : RoomDatabase() {
             // To keep DB data through app restarts comment coroutine exec:
             /*INSTANCE?.let { database ->
                 scope.launch(Dispatchers.IO) {
+                    Log.d("DatabaseCallback", "Starting database seeding...")
                     DatabaseSeeder.preFillDatabase(
                         database.questionnaireDAO(),
                         database.questionQuestionnaireDAO(),
-                        database.typeAnswerDAO())
+                        database.typeAnswerDAO()
+                    )
+                    Log.d("DatabaseCallback", "Database seeding completed.")
                 }
             }*/
         }
@@ -85,12 +89,13 @@ abstract class AppDatabase : RoomDatabase() {
             //To clear and repopulate DB every time app is started comment coroutine exec:
             INSTANCE?.let { database ->
                 scope.launch(Dispatchers.IO) {
-                    println("Pre-filling database...")
+                    Log.d("DatabaseCallback", "Starting database seeding...")
                     DatabaseSeeder.preFillDatabase(
                         database.questionnaireDAO(),
                         database.questionQuestionnaireDAO(),
-                        database.typeAnswerDAO())
-                    println("Database pre-filled successfully!")
+                        database.typeAnswerDAO()
+                    )
+                    Log.d("DatabaseCallback", "Database seeding completed.")
                 }
             }
         }

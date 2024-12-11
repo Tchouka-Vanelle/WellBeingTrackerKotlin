@@ -1,4 +1,4 @@
-package edu.ufp.wellbeingtracker.utils
+package edu.ufp.wellbeingtracker.utils.functions
 
 import android.view.Gravity
 import com.google.android.material.snackbar.Snackbar

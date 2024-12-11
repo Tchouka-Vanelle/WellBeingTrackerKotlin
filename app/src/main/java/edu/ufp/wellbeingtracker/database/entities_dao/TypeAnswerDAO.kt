@@ -12,4 +12,6 @@ interface TypeAnswerDAO {
     suspend fun insertTypeAnswers(vararg typeAnswers: TypeAnswer): List<Long>
     @Query("SELECT * FROM type_answers")
     suspend fun getAllTypeAnswers(): List<TypeAnswer>
+    @Query("SELECT meaning FROM type_answers order by id desc")
+    suspend fun getAllMeanings(): List<String>
 }

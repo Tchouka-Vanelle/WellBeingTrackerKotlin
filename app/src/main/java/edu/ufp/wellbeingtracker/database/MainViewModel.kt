@@ -1,39 +1,43 @@
 package edu.ufp.wellbeingtracker.database
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import edu.ufp.wellbeingtracker.activities.QuestionnaireWithQuestions
+import edu.ufp.wellbeingtracker.utils.models.QuestionnaireWithQuestions
 import edu.ufp.wellbeingtracker.database.entities.AnswerQuestionnaire
-import edu.ufp.wellbeingtracker.database.entities.QuestionQuestionnaire
-import edu.ufp.wellbeingtracker.database.entities.Questionnaire
-import edu.ufp.wellbeingtracker.database.entities.TypeAnswer
 import edu.ufp.wellbeingtracker.database.entities.User
-import edu.ufp.wellbeingtracker.utils.hashPassword
-import edu.ufp.wellbeingtracker.utils.verifyPassword
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import edu.ufp.wellbeingtracker.utils.functions.hashPassword
+import edu.ufp.wellbeingtracker.utils.functions.verifyPassword
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import kotlinx.coroutines.runBlocking
 import java.sql.Date
 
 class MainViewModel(private val repository: MainRepository) : ViewModel() {
 
     val questionnaireWithQuestions = MutableLiveData<List<QuestionnaireWithQuestions>>()
 
+
     fun fetchQuestionnaires() {
         viewModelScope.launch {
             val questionnaires = repository.getAllQuestionnaires()
+            Log.d("MainViewModel", "Fetched questionnaires: $questionnaires")
+
             val questionnairesWithQuestions = mutableListOf<QuestionnaireWithQuestions>()
             for (questionnaire in questionnaires) {
                 val questions = repository.getAllQuestionsForQuestionnaire(questionnaire.id)
+                Log.d("MainViewModel", "Questions for questionnaire ${questionnaire.id}: $questions")
                 questionnairesWithQuestions.add(QuestionnaireWithQuestions(questionnaire, questions))
             }
-            questionnaireWithQuestions.postValue(questionnairesWithQuestions)  // Set the LiveData value
+
+            if (questionnairesWithQuestions.isEmpty()) {
+                Log.d("MainViewModel", "No questionnaires with questions found")
+            }
+
+            questionnaireWithQuestions.postValue(questionnairesWithQuestions)
         }
     }
+
 
     fun registerUser(username: String, password: String, onResult: (Boolean) -> Unit) {
         viewModelScope.launch {
@@ -78,7 +82,19 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
         }
     }
 
+    fun loadMeanings(onResult: (List<String>) -> Unit) {
+        viewModelScope.launch {
+            val meanings = repository.getAllMeanings()
+            onResult(meanings)
+        }
+    }
 
+    fun countAllQuestionsForQuestionnaire(questionnaireId: Int, onResult: (Int) -> Unit) {
+        viewModelScope.launch {
+            val result = repository.countAllQuestionsForQuestionnaire(questionnaireId)
+            onResult(result)
+        }
+    }
 
 }
 
