@@ -16,7 +16,7 @@ import androidx.room.PrimaryKey
     indices = [Index(value = ["idQuestionnaire"])]
 )
 data class QuestionQuestionnaire(
-    @PrimaryKey(autoGenerate = true) val id: Int = 1,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val idQuestionnaire: Int,
     val title: String
 )

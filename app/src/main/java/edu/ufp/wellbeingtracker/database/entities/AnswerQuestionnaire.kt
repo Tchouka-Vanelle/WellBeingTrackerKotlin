@@ -36,7 +36,7 @@ import java.time.LocalDateTime
     ]
 )
 data class AnswerQuestionnaire(
-    @PrimaryKey(autoGenerate = true) val id: Int = 1,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val idQuestionQuestionnaire: Int,
     val idUser: Int,
     val idTypeAnswer: Int,

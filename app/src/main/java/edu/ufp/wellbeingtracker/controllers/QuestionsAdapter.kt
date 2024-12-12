@@ -62,7 +62,6 @@ RecyclerView.Adapter<QuestionsAdapter.QuestionsViewHolder>(){
         holder.neutralDescription.text = meanings.getOrNull(1) ?: ""
         holder.agreeDescription.text = meanings.getOrNull(2) ?: ""
 
-
     }
 
     private fun resetIcons(holder: QuestionsViewHolder) {

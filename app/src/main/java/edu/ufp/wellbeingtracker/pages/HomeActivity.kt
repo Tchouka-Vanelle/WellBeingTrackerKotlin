@@ -75,10 +75,13 @@ class HomeActivity : AppCompatActivity(), OnUserResponseListener {
             mutableMapOf()
         }[questionId] = answerId
 
+    }
+
+    override fun onUserSaveQuestionnaire(questionnaireId: Int) {
 
         mainViewModel.countAllQuestionsForQuestionnaire(questionnaireId) {
 
-            totalQuestions ->
+                totalQuestions ->
             val allQuestionsAnswered = responses[questionnaireId]?.size == totalQuestions
 
             if(allQuestionsAnswered) {
@@ -88,11 +91,6 @@ class HomeActivity : AppCompatActivity(), OnUserResponseListener {
             }
         }
 
-
-    }
-
-    override fun onUserSaveQuestionnaire(questionnaireId: Int) {
-        TODO("Not yet implemented")
     }
 }
 

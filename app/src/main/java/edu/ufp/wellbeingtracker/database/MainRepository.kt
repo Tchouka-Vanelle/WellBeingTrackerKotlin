@@ -10,6 +10,7 @@ import edu.ufp.wellbeingtracker.database.entities_dao.QuestionQuestionnaireDAO
 import edu.ufp.wellbeingtracker.database.entities_dao.QuestionnaireDAO
 import edu.ufp.wellbeingtracker.database.entities_dao.TypeAnswerDAO
 import edu.ufp.wellbeingtracker.database.entities_dao.UserDAO
+import java.sql.Date
 
 class MainRepository(
     private val userDao: UserDAO,
@@ -31,8 +32,20 @@ class MainRepository(
     suspend fun insertTypeAnswers(vararg typeAnswers: TypeAnswer) =
         typeAnswerDAO.insertTypeAnswers(*typeAnswers)
 
-    suspend fun insertAnswer(answer: AnswerQuestionnaire) =
+    suspend fun insertAnswer(userId: Int, questionId: Int, typeAnswerId: Int)
+    {
+        val currentDateTime = Date(System.currentTimeMillis())
+
+        // Create AnswerQuestionnaire object
+        val answer = AnswerQuestionnaire(
+            idQuestionQuestionnaire = questionId,
+            idUser = userId,
+            idTypeAnswer = typeAnswerId,
+            dateTimeAnswer = currentDateTime // Store the formatted date-time
+        )
         answerQuestionnaireDAO.insertAnswer(answer)
+    }
+
 
     suspend fun getAllQuestionnaires() =
         questionnaireDao.getAllQuestionnaires()

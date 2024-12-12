@@ -10,6 +10,7 @@ import edu.ufp.wellbeingtracker.database.entities.AnswerQuestionnaire
 import edu.ufp.wellbeingtracker.database.entities.User
 import edu.ufp.wellbeingtracker.utils.functions.hashPassword
 import edu.ufp.wellbeingtracker.utils.functions.verifyPassword
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.sql.Date
 
@@ -19,7 +20,7 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
 
 
     fun fetchQuestionnaires() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val questionnaires = repository.getAllQuestionnaires()
             Log.d("MainViewModel", "Fetched questionnaires: $questionnaires")
 
@@ -40,7 +41,7 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
 
 
     fun registerUser(username: String, password: String, onResult: (Boolean) -> Unit) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val hashedPassword = hashPassword(password)
             val existingUser = repository.getUserByName(username)
 
@@ -55,7 +56,7 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
     }
 
     fun loginUser(username: String, password: String, onLoginResult: (Int) -> Unit) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val user = repository.getUserByName(username)
             val userId = user?.let {
                 if (verifyPassword(password, it.hashedPassword)) it.id else 0
@@ -65,32 +66,21 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
     }
 
     fun saveAnswer(userId: Int, questionId: Int, typeAnswerId: Int) {
-        viewModelScope.launch {
-            val currentDateTime = Date(System.currentTimeMillis())
+        viewModelScope.launch(Dispatchers.IO) {
 
-            // Create AnswerQuestionnaire object
-            val answer = AnswerQuestionnaire(
-                idQuestionQuestionnaire = questionId,
-                idUser = userId,
-                idTypeAnswer = typeAnswerId,
-                dateTimeAnswer = currentDateTime // Store the formatted date-time
-            )
-
-            // Insert answer into database
-            repository.insertAnswer(answer)
-
+            repository.insertAnswer(userId, questionId, typeAnswerId)
         }
     }
 
     fun loadMeanings(onResult: (List<String>) -> Unit) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val meanings = repository.getAllMeanings()
             onResult(meanings)
         }
     }
 
     fun countAllQuestionsForQuestionnaire(questionnaireId: Int, onResult: (Int) -> Unit) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val result = repository.countAllQuestionsForQuestionnaire(questionnaireId)
             onResult(result)
         }

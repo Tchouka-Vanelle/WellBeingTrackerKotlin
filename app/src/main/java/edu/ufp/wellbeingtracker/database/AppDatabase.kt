@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
         TypeAnswer::class,
         AnswerQuestionnaire::class,
                ],
-    version = 4,
+    version = 1,
     exportSchema = false
 )
 @TypeConverters(DateConverter::class)
@@ -63,30 +63,13 @@ abstract class AppDatabase : RoomDatabase() {
         }
     }
     private class WellBeingDatabaseCallback(private val scope: CoroutineScope) :
-        RoomDatabase.Callback()
+        Callback()
     {
 
         /** Override onOpen() to clear and populate DB every time app is started. */
         override fun onOpen(db: SupportSQLiteDatabase) {
             super.onOpen(db)
             // To keep DB data through app restarts comment coroutine exec:
-            /*INSTANCE?.let { database ->
-                scope.launch(Dispatchers.IO) {
-                    Log.d("DatabaseCallback", "Starting database seeding...")
-                    DatabaseSeeder.preFillDatabase(
-                        database.questionnaireDAO(),
-                        database.questionQuestionnaireDAO(),
-                        database.typeAnswerDAO()
-                    )
-                    Log.d("DatabaseCallback", "Database seeding completed.")
-                }
-            }*/
-        }
-
-        /** Overrite onCreate() to populate DB only first time app is launched. */
-        override fun onCreate(db: SupportSQLiteDatabase) {
-            super.onCreate(db)
-            //To clear and repopulate DB every time app is started comment coroutine exec:
             INSTANCE?.let { database ->
                 scope.launch(Dispatchers.IO) {
                     Log.d("DatabaseCallback", "Starting database seeding...")
@@ -98,6 +81,23 @@ abstract class AppDatabase : RoomDatabase() {
                     Log.d("DatabaseCallback", "Database seeding completed.")
                 }
             }
+        }
+
+        /** overrite onCreate() to populate DB only first time app is launched. */
+        override fun onCreate(db: SupportSQLiteDatabase) {
+            super.onCreate(db)
+            //To clear and repopulate DB every time app is started comment coroutine exec:
+            /*INSTANCE?.let { database ->
+                scope.launch(Dispatchers.IO) {
+                    Log.d("DatabaseCallback", "Starting database seeding...")
+                    DatabaseSeeder.preFillDatabase(
+                        database.questionnaireDAO(),
+                        database.questionQuestionnaireDAO(),
+                        database.typeAnswerDAO()
+                    )
+                    Log.d("DatabaseCallback", "Database seeding completed.")
+                }
+            }*/
         }
     }
 }

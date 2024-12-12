@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "questionnaires")
 data class Questionnaire(
-    @PrimaryKey(autoGenerate = true) val id: Int = 1,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val title: String,
     val isMultipleAnswer: Boolean,
     val isMultipleAnswerInDay: Boolean
