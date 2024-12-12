@@ -16,6 +16,7 @@ import edu.ufp.wellbeingtracker.database.MainViewModel
 import edu.ufp.wellbeingtracker.database.MainViewModelFactory
 import edu.ufp.wellbeingtracker.database.WellBeingApp
 import edu.ufp.wellbeingtracker.utils.functions.OnUserResponseListener
+import edu.ufp.wellbeingtracker.utils.functions.showSnackbar
 
 class HomeActivity : AppCompatActivity(), OnUserResponseListener {
 
@@ -85,9 +86,35 @@ class HomeActivity : AppCompatActivity(), OnUserResponseListener {
             val allQuestionsAnswered = responses[questionnaireId]?.size == totalQuestions
 
             if(allQuestionsAnswered) {
+
                 responses[questionnaireId]?.forEach{ (qId, aId) ->
-                    mainViewModel.saveAnswer(userId, qId, aId)
+                    mainViewModel.saveAnswer(userId, qId, aId, questionnaireId) {
+                        isSuccess ->
+                        when (isSuccess) {
+
+                           0-> showSnackbar(
+                                findViewById(R.id.main),
+                                "Your answer has been save"
+                            )
+
+                           1 -> showSnackbar(
+                                findViewById(R.id.main),
+                                "You cannot answer the same question twice on the same day."
+                            )
+
+                           2 -> showSnackbar(
+                                findViewById(R.id.main),
+                                "An Error occred while saving your answer"
+                            )
+                           else -> showSnackbar(
+                               findViewById(R.id.main),
+                               "An error occured."
+                           )
+                        }
+                    }
                 }
+            }else {
+                showSnackbar(findViewById(R.id.main), "You can't save without respond to all the questions")
             }
         }
 

@@ -65,10 +65,10 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
         }
     }
 
-    fun saveAnswer(userId: Int, questionId: Int, typeAnswerId: Int) {
+    fun saveAnswer(userId: Int, questionId: Int, typeAnswerId: Int, questionnaireId: Int, onResult: (Int) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
 
-            repository.insertAnswer(userId, questionId, typeAnswerId)
+            onResult(repository.insertAnswer(userId, questionId, typeAnswerId, questionnaireId))
         }
     }
 

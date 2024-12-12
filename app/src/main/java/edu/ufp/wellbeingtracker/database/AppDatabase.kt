@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
         TypeAnswer::class,
         AnswerQuestionnaire::class,
                ],
-    version = 1,
+    version = 6,
     exportSchema = false
 )
 @TypeConverters(DateConverter::class)
@@ -70,7 +70,7 @@ abstract class AppDatabase : RoomDatabase() {
         override fun onOpen(db: SupportSQLiteDatabase) {
             super.onOpen(db)
             // To keep DB data through app restarts comment coroutine exec:
-            INSTANCE?.let { database ->
+            /*INSTANCE?.let { database ->
                 scope.launch(Dispatchers.IO) {
                     Log.d("DatabaseCallback", "Starting database seeding...")
                     DatabaseSeeder.preFillDatabase(
@@ -80,7 +80,7 @@ abstract class AppDatabase : RoomDatabase() {
                     )
                     Log.d("DatabaseCallback", "Database seeding completed.")
                 }
-            }
+            }*/
         }
 
         /** overrite onCreate() to populate DB only first time app is launched. */

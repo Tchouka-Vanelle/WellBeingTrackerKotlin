@@ -5,7 +5,6 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.sql.Date
-import java.time.LocalDateTime
 
 @Entity(
     tableName = "answer_questionnaires",
@@ -40,5 +39,5 @@ data class AnswerQuestionnaire(
     val idQuestionQuestionnaire: Int,
     val idUser: Int,
     val idTypeAnswer: Int,
-    val dateTimeAnswer: Date
+    val dateAnswer: Date
 )

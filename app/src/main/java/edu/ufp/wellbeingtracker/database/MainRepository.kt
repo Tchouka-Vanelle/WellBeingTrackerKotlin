@@ -10,6 +10,8 @@ import edu.ufp.wellbeingtracker.database.entities_dao.QuestionQuestionnaireDAO
 import edu.ufp.wellbeingtracker.database.entities_dao.QuestionnaireDAO
 import edu.ufp.wellbeingtracker.database.entities_dao.TypeAnswerDAO
 import edu.ufp.wellbeingtracker.database.entities_dao.UserDAO
+import edu.ufp.wellbeingtracker.utils.functions.isSameDay
+import edu.ufp.wellbeingtracker.utils.functions.showSnackbar
 import java.sql.Date
 
 class MainRepository(
@@ -32,18 +34,38 @@ class MainRepository(
     suspend fun insertTypeAnswers(vararg typeAnswers: TypeAnswer) =
         typeAnswerDAO.insertTypeAnswers(*typeAnswers)
 
-    suspend fun insertAnswer(userId: Int, questionId: Int, typeAnswerId: Int)
-    {
-        val currentDateTime = Date(System.currentTimeMillis())
+    suspend fun insertAnswer(
+        userId: Int, questionId: Int, typeAnswerId: Int, questionnaireId: Int
+    ): Int {
+        val currentDate = Date(System.currentTimeMillis())//2024-12-11
+
+        if( !questionnaireDao.isMultipleAnswerInDay(questionnaireId) ) {
+
+            val lastDate: Date? = answerQuestionnaireDAO.getLastDateAnswer(userId, questionId)
+
+            if (lastDate != null) {
+                val isSameDay = isSameDay(lastDate, currentDate)
+
+                if (isSameDay) {
+                    return 1
+                }
+            }
+        }
 
         // Create AnswerQuestionnaire object
         val answer = AnswerQuestionnaire(
             idQuestionQuestionnaire = questionId,
             idUser = userId,
             idTypeAnswer = typeAnswerId,
-            dateTimeAnswer = currentDateTime // Store the formatted date-time
+            dateAnswer = currentDate // Store the formatted date-time
         )
-        answerQuestionnaireDAO.insertAnswer(answer)
+        val rowId = answerQuestionnaireDAO.insertAnswer(answer)
+
+        return if(rowId > 0)
+             0
+        else
+             2
+
     }
 
 
@@ -58,4 +80,7 @@ class MainRepository(
 
     suspend fun getAllMeanings() =
         typeAnswerDAO.getAllMeanings()
+
+    suspend fun isMultipleAnswerInDay(id: Int) =
+        questionnaireDao.isMultipleAnswerInDay(id)
 }
